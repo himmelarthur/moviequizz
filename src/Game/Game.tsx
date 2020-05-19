@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Question from './Question';
+import AddToHighScores from './AddToHighScores';
+import { HighScore } from '../types';
+import HighScores from './HighScores';
 
 type GameState = {
     goodAnswers: number;
@@ -39,17 +42,30 @@ const useInitGame = () => {
     return { secondsElapsed, goodAnswers, finalState, handleAnswer, reset };
 }
 
+const useHighScores = () => {
+    const [highScores, setHighScores] = useState<HighScore[]>([]);
+    const addToHighScores = useCallback((highScore: HighScore) => {
+        setHighScores([...highScores, highScore]);
+    }, [highScores, setHighScores])
+    return { highScores, addToHighScores };
+};
+
 const Game = () => {
     const { secondsElapsed, goodAnswers, finalState, handleAnswer, reset } = useInitGame();
+    const { highScores, addToHighScores } = useHighScores();
     return <div>
         <h1>Movie Quizz</h1>
-        <div>{secondsElapsed} seconds elapsed</div>
-        <div>{goodAnswers} good answers</div>
         {finalState ? <div>
             <div>{finalState.goodAnswers} good answers</div>
             <div>{finalState.secondsElapsed} seconds</div>
+            <AddToHighScores onAddToHighScore={(username) => addToHighScores({ username, score: finalState.goodAnswers })} />
             <button onClick={reset}>Play again</button>
-        </div> : <Question onAnswer={handleAnswer}></Question>}
+        </div> : <div>
+                <div>{goodAnswers} good answers</div>
+                <div>{secondsElapsed} seconds elapsed</div>
+                <Question onAnswer={handleAnswer}></Question>
+            </div>}
+        <HighScores highScores={highScores} />
     </div>
 }
 
