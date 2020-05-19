@@ -74,5 +74,9 @@ export const useHighScores = () => {
         save(LS_HS_KEY, newHighScores)
         setHighScores(newHighScores);
     }, [highScores, setHighScores])
-    return { highScores, addToHighScores };
+    const resetScores = () => {
+        save(LS_HS_KEY, [])
+        setHighScores([]);
+    }
+    return { highScores, addToHighScores, resetScores };
 };
