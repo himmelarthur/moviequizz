@@ -1,5 +1,6 @@
 export type HighScore = {
     username: string;
+    time: number;
     score: number;
 }
 

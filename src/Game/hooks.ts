@@ -69,8 +69,8 @@ export const useHighScores = () => {
         const savedScores = load<HighScore[]>(LS_HS_KEY);
         if (savedScores) setHighScores(savedScores)
     }, []);
-    const addToHighScores = useCallback((username: string, score: number) => {
-        const newHighScores = [...highScores, { username, score }];
+    const addToHighScores = useCallback((username: string, score: number, time: number) => {
+        const newHighScores = [...highScores, { username, score, time }];
         save(LS_HS_KEY, newHighScores)
         setHighScores(newHighScores);
     }, [highScores, setHighScores])

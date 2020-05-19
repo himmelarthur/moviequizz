@@ -4,7 +4,7 @@ import AddToHighScores from './AddToHighScores';
 import { useInitGame, useHighScores } from './hooks';
 
 type Props = {
-    onAddToHighScores: (username: string, score: number) => void;
+    onAddToHighScores: (username: string, score: number, time: number) => void;
 }
 
 const Game = ({ onAddToHighScores }: Props) => {
@@ -14,7 +14,7 @@ const Game = ({ onAddToHighScores }: Props) => {
         {finalState ? <div>
             <div>{finalState.goodAnswers} good answers</div>
             <div>{finalState.secondsElapsed} seconds</div>
-            <AddToHighScores onAddToHighScore={(username) => onAddToHighScores(username, finalState.goodAnswers)} />
+            <AddToHighScores onAddToHighScore={(username) => onAddToHighScores(username, finalState.goodAnswers, finalState.secondsElapsed)} />
             <button className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded cursor-pointer" onClick={reset}>Play again</button>
         </div> : <div>
                 <div>{goodAnswers} good answers</div>
