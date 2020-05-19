@@ -38,7 +38,7 @@ export const fetchMostPopularMoviesPage = async (pageNumber: number) => {
 };
 
 export const fetchMostPopularMovies = async () => {
-    const pages = await Promise.all([1, 2, 3, 4, 5].map(fetchMostPopularMoviesPage))
+    const pages = await Promise.all([1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(fetchMostPopularMoviesPage))
     return pages.reduce((prev, curr) => {
         return [...prev, ...curr]
     }, []);

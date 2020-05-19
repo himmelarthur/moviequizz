@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Question from './Question';
 import AddToHighScores from './AddToHighScores';
 import HighScores from './HighScores';

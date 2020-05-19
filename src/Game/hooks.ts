@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { HighScore, GameState, Question } from "../types";
 import { GameData, initData } from '../utils/data';
 import { pick } from "../utils/arrays";
+import { load, save } from "../utils/db";
 
 const LS_HS_KEY = 'highscores';
 
@@ -23,8 +24,8 @@ export const useInitGame = () => {
 
     useEffect(() => {
         initData().then(gameData => {
-            setData(gameData);
             generateNewQuestion(gameData);
+            setData(gameData);
         })
     }, []);
 
@@ -65,22 +66,12 @@ export const useInitGame = () => {
 export const useHighScores = () => {
     const [highScores, setHighScores] = useState<HighScore[]>([]);
     useEffect(() => {
-        // Persistance
-        const encodedHs = localStorage.getItem(LS_HS_KEY);
-        if (encodedHs === null) {
-            return;
-        }
-        try {
-            const decodedHs = JSON.parse(atob(encodedHs));
-            setHighScores(decodedHs);
-        } catch (err) {
-            console.warn('Could not decode the high scores from localstorage, removing');
-            localStorage.removeItem(LS_HS_KEY)
-        }
+        const savedScores = load<HighScore[]>(LS_HS_KEY);
+        if (savedScores) setHighScores(savedScores)
     }, []);
     const addToHighScores = useCallback((highScore: HighScore) => {
         const newHighScores = [...highScores, highScore];
-        localStorage.setItem('highscores', btoa(JSON.stringify(newHighScores)))
+        save(LS_HS_KEY, newHighScores)
         setHighScores(newHighScores);
     }, [highScores, setHighScores])
     return { highScores, addToHighScores };

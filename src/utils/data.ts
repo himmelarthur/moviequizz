@@ -1,4 +1,5 @@
 import { fetchMostPopularMovies } from './movieDB';
+import { save, load } from './db';
 
 export interface GameData {
     movies: {
@@ -10,8 +11,10 @@ export interface GameData {
 }
 
 export const initData = async () => {
+    const gameData = load<GameData>('gameData');
+    if (gameData) return gameData;
     const baseData = await fetchMostPopularMovies();
-    return baseData.reduce<GameData>((prev, curr) => {
+    const freshData = baseData.reduce<GameData>((prev, curr) => {
         // Only first three actors
         const actors = curr.cast.map(actor => actor.name).slice(0, 2);
         return {
@@ -20,4 +23,6 @@ export const initData = async () => {
             actors: [...prev.actors, ...actors],
         }
     }, { movies: [], actors: [] });
+    save('gameData', freshData);
+    return freshData
 }
