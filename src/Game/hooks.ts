@@ -54,6 +54,8 @@ export const useInitGame = () => {
     const reset = () => {
         setSecondsElapsed(0);
         setGoodAnswers(0);
+        if (data)
+            generateNewQuestion(data);
         setFinalState(undefined);
     }
 

@@ -22,8 +22,8 @@ const fetchCast = async (movieId: number) => {
     return credits.cast;
 }
 
-export const fetchTopRatedMovies = async () => {
-    const response = await fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}&page=1`);
+export const fetchMostPopularMoviesPage = async (pageNumber: number) => {
+    const response = await fetch(`${BASE_URL}/movie/popular?api_key=${API_KEY}&page=${pageNumber}`);
     const page: TopRatedMoviesResponse = await response.json()
     const moviesWithCast = await Promise.all(page.results.map(async ({ id, title, poster_path }) => {
         const cast = await fetchCast(id);
@@ -35,4 +35,11 @@ export const fetchTopRatedMovies = async () => {
         }
     }));
     return moviesWithCast
+};
+
+export const fetchMostPopularMovies = async () => {
+    const pages = await Promise.all([1, 2, 3, 4, 5].map(fetchMostPopularMoviesPage))
+    return pages.reduce((prev, curr) => {
+        return [...prev, ...curr]
+    }, []);
 }
