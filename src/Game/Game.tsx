@@ -9,6 +9,8 @@ type GameState = {
     secondsElapsed: number;
 }
 
+const LS_HS_KEY = 'highscores';
+
 const useInitGame = () => {
     const [secondsElapsed, setSecondsElapsed] = useState(0);
     const [goodAnswers, setGoodAnswers] = useState(0);
@@ -44,8 +46,24 @@ const useInitGame = () => {
 
 const useHighScores = () => {
     const [highScores, setHighScores] = useState<HighScore[]>([]);
+    useEffect(() => {
+        // Persistance
+        const encodedHs = localStorage.getItem(LS_HS_KEY);
+        if (encodedHs === null) {
+            return;
+        }
+        try {
+            const decodedHs = JSON.parse(atob(encodedHs));
+            setHighScores(decodedHs);
+        } catch (err) {
+            console.warn('Could not decode the high scores from localstorage, removing');
+            localStorage.removeItem(LS_HS_KEY)
+        }
+    }, []);
     const addToHighScores = useCallback((highScore: HighScore) => {
-        setHighScores([...highScores, highScore]);
+        const newHighScores = [...highScores, highScore];
+        localStorage.setItem('highscores', btoa(JSON.stringify(newHighScores)))
+        setHighScores(newHighScores);
     }, [highScores, setHighScores])
     return { highScores, addToHighScores };
 };
