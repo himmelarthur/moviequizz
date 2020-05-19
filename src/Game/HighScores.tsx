@@ -1,17 +1,24 @@
 import React from 'react';
-import { useHighScores } from './hooks';
+import { HighScore } from '../types';
 
-const HighScores = () => {
-    const { highScores, resetScores } = useHighScores();
-    if (!highScores.length) return <div></div>
-    return <div>
-        {highScores.sort((a, b) => a.score === b.score ? (a.username < b.username ? -1 : 1) : (a.score < b.score ? 1 : -1)).map((score, idx) => (<div key={idx.toString()}>
-            <div>{score.username}</div>
-            <div>{score.score} pts</div>
-        </div>))}
-        <button onClick={() => {
+type Props = {
+    scores: HighScore[]
+    onResetScores: () => void;
+}
+
+const HighScores = ({ scores, onResetScores }: Props) => {
+    if (!scores.length) return <div></div>
+    return <div className="mt-4">
+        <h1 className="text-3xl">Highscores</h1>
+        {scores.sort((a, b) => a.score === b.score ? (a.username < b.username ? -1 : 1) : (a.score < b.score ? 1 : -1)).map((score, idx) => (
+            <div className="flex items-center" key={idx.toString()}>
+                <div className="pr-4">{score.username}</div>
+                <div>{score.score} pts</div>
+            </div>
+        ))}
+        <button className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded cursor-pointer" onClick={() => {
             if (window.confirm('Do you want to reset high scores?')) {
-                resetScores();
+                onResetScores();
             }
         }}>Reset Highscores</button>
     </div>

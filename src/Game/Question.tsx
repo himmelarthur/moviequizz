@@ -9,11 +9,17 @@ type Props = {
 }
 
 const Question = ({ question, onAnswer }: Props) => {
-    return <div>
+    return <div className="flex justify-between">
         <img src={`${BASE_IMG_URL}/${question.movie.poster}`} alt="" />
-        <h1>Is {question.actor} in {question.movie.title}?</h1>
-        <button onClick={() => onAnswer(true)}>Yes</button>
-        <button onClick={() => onAnswer(false)}>No</button>
+        <div className="flex flex-col">
+            <h1 className="text-4xl p-8">Is {question.actor} in {question.movie.title}?</h1>
+            <div className="flex items-center justify-center">
+
+                <button className="bg-blue-500 mr-4 hover:bg-blue-700 text-white py-2 px-4 rounded cursor-pointer w-20" onClick={() => onAnswer(true)}>Yes</button>
+                <button className="bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded cursor-pointer w-20" onClick={() => onAnswer(false)}>No</button>
+            </div>
+
+        </div>
     </div>
 }
 
