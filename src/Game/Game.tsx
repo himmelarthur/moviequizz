@@ -30,11 +30,17 @@ const useInitGame = () => {
         }
     }, [setGoodAnswers, goodAnswers]);
 
-    return { secondsElapsed, goodAnswers, finalState, handleAnswer };
+    const reset = () => {
+        setSecondsElapsed(0);
+        setGoodAnswers(0);
+        setFinalState(undefined);
+    }
+
+    return { secondsElapsed, goodAnswers, finalState, handleAnswer, reset };
 }
 
 const Game = () => {
-    const { secondsElapsed, goodAnswers, finalState, handleAnswer } = useInitGame();
+    const { secondsElapsed, goodAnswers, finalState, handleAnswer, reset } = useInitGame();
     return <div>
         <h1>Movie Quizz</h1>
         <div>{secondsElapsed} seconds elapsed</div>
@@ -42,6 +48,7 @@ const Game = () => {
         {finalState ? <div>
             <div>{finalState.goodAnswers} good answers</div>
             <div>{finalState.secondsElapsed} seconds</div>
+            <button onClick={reset}>Play again</button>
         </div> : <Question onAnswer={handleAnswer}></Question>}
     </div>
 }
