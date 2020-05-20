@@ -1,7 +1,7 @@
 import React from 'react';
 import Question from './Question';
 import AddToHighScores from './AddToHighScores';
-import { useInitGame, useHighScores } from './hooks';
+import { useInitGame } from './hooks';
 
 type Props = {
     onAddToHighScores: (username: string, score: number, time: number) => void;
@@ -12,6 +12,7 @@ const Game = ({ onAddToHighScores }: Props) => {
     if (!data || !question) return <div>Loading...</div>
     return <div>
         {finalState ? <div>
+            <div>Game over!</div>
             <div>{finalState.goodAnswers} good answers</div>
             <div>{finalState.secondsElapsed} seconds</div>
             <AddToHighScores onAddToHighScore={(username) => onAddToHighScores(username, finalState.goodAnswers, finalState.secondsElapsed)} />
